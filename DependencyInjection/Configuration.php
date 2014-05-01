@@ -354,8 +354,16 @@ class Configuration implements ConfigurationInterface
             ->useAttributeAsKey('name')
             ->prototype('array')
                 ->validate()
-                ->ifTrue(function($v) { return isset($v['fields']) && empty($v['fields']); })
-                    ->then(function($v) { unset($v['fields']); return $v; })
+                    ->always()
+                    ->then(function($v) {
+                        foreach (array('fields','properties') as $prop) {
+                            if (isset($v[$prop]) && empty($v[$prop])) {
+                                unset($v[$prop]);
+                            }
+                        }
+                        
+                        return $v;
+                    })
                 ->end()
                 ->treatNullLike(array())
                 ->addDefaultsIfNotSet()
@@ -467,8 +475,16 @@ class Configuration implements ConfigurationInterface
                 ->useAttributeAsKey('name')
                 ->prototype('array')
                     ->validate()
-                        ->ifTrue(function($v) { return isset($v['fields']) && empty($v['fields']); })
-                        ->then(function($v) { unset($v['fields']); return $v; })
+                        ->always()
+                        ->then(function($v) {
+                            foreach (array('fields','properties') as $prop) {
+                                if (isset($v[$prop]) && empty($v[$prop])) {
+                                    unset($v[$prop]);
+                                }
+                            }
+
+                            return $v;
+                        })
                     ->end()
                     ->treatNullLike(array())
                     ->addDefaultsIfNotSet()
